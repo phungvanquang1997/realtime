@@ -1,26 +1,31 @@
 <html>
 	<head>
 		<title>Demo Socketio - Homepage</title>
-		<script src="jquery.js"></script>
 		<script src="socket.io/socket.io.js"></script>
 
 		<script>
-			var socket = io("http://localhost:3001");
+			var socket = io.connect("http://localhost:3001");
             let room = 'room1';
 
-            socket.on('connect', () => {
-              console.log(socket.connected); // true
-                socket.emit('room', room);
+            socket.on('connect', async () => {
+                socket.emit('join_room', room);
+
+                socket.emit('message',  ({room: 'room1', message: 'xin chào'}));
             });
 
-            socket.on('joined', function(data) {
+            socket.on('message1',  (data) => {
                 console.log(data);
             })
 
             socket.on('error', function (err) {
                 console.log(err);
-            });
+              });
 
 		</script>
 	</head>
+<body>
+ <button onclick='socket.emit("say",{"room":room,"message":"hello world"})'>
+ Say hello world
+ </button>
+</body>
 </html>
