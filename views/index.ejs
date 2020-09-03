@@ -1,0 +1,32 @@
+<html>
+	<head>
+		<title>Demo Socketio - Homepage</title>
+		<script src="jquery.js"></script>
+		<script src="socket.io/socket.io.js"></script>
+
+		<script>
+			var socket = io("http://localhost:3001");
+            let room = 'room1';
+
+            socket.on('connect', () => {
+              console.log(socket.connected); // true
+                socket.emit('room', room);
+            });
+
+            socket.on('joined', (data) => {
+                console.log(data);
+                document.body.innerHTML = '';
+                document.write(data);
+            })
+
+		</script>
+	</head>
+
+	<body>
+		<h1>Demo Socketio</h1>
+
+		<div>
+			<button id="send">Send</button>
+		</div>
+	</body>
+</html>
