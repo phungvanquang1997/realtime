@@ -36,11 +36,15 @@ io.on('connection', function (socket) {
   console.log('connected');
 
   socket.on('room', (room) => {
-    console.log(room);
     socket.join(room)
+    console.log(socket.rooms);
   });
 
   socket.in('room1').emit('joined', 'u r in room 1');
+
+  socket.on('error', function (err) {
+    console.log(err);
+  });
 });
 
 

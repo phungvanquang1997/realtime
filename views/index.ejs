@@ -13,20 +13,14 @@
                 socket.emit('room', room);
             });
 
-            socket.on('joined', (data) => {
+            socket.on('joined', function(data) {
                 console.log(data);
-                document.body.innerHTML = '';
-                document.write(data);
             })
+
+            socket.on('error', function (err) {
+                console.log(err);
+            });
 
 		</script>
 	</head>
-
-	<body>
-		<h1>Demo Socketio</h1>
-
-		<div>
-			<button id="send">Send</button>
-		</div>
-	</body>
 </html>
