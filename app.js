@@ -35,18 +35,18 @@ server.listen(port, () => {
 io.on('connection', function (socket) {
   console.log('connected');
 
-  socket.on('room', (room) => {
+  socket.on('join_room', (room) => {
     socket.join(room)
-    console.log(socket.rooms);
   });
 
-  socket.in('room1').emit('joined', 'u r in room 1');
+  socket.on('say',function(data){
+    io.to(data.room).emit('message',data.message);
+  })
 
   socket.on('error', function (err) {
     console.log(err);
   });
 });
-
 
 console.log(io.sockets.rooms);
 
