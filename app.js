@@ -46,9 +46,19 @@ io.on('connection', function (socket) {
   socket.on('error', function (err) {
     console.log(err);
   });
-});
 
-console.log(io.sockets.rooms);
+  socket.on('typing', (data) => {
+    console.log(data);
+    io.emit('display', data)
+  });
+
+  // sending to the client
+  socket.emit('hello', 'can you hear me?', 1, 2, 'abc');
+
+  // sending to all clients except sender
+  socket.broadcast.emit('broadcast', 'hello friends!');
+
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

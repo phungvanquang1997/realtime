@@ -2,30 +2,50 @@
 	<head>
 		<title>Demo Socketio - Homepage</title>
 		<script src="socket.io/socket.io.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	</head>
+<body>
+Type something: <input name="message" id="message">
 
-		<script>
+ <button onclick='socket.emit("say",{"room":room,"message":"hello world"})'>
+ Say hello world
+ </button>
+
+<div>
+	<p class="typing">
+		Needs someone chat here
+	</p>
+</div>
+</body>
+	<script>
 			var socket = io.connect("http://localhost:3001");
             let room = 'room1';
 
-            socket.on('connect', async () => {
-                socket.emit('join_room', room);
+			socket.on('connect', async () => {
+				socket.emit('join_room', room);
 
-                socket.emit('message',  ({room: 'room1', message: 'xin chào'}));
-            });
+				socket.emit('message',  ({room: 'room1', message: 'xin chào'}));
 
-            socket.on('message1',  (data) => {
+
+			});
+
+			$('#message').change(() => {
+				socket.emit('typing', {'user': 'quang', 'type': true})
+			});
+
+			socket.on('display', (data) => {
+				if (data.type) {
+					$('.typing').text(`${data.user} is typing...`)
+				}
+			})
+
+            socket.on('message',  (data) => {
                 console.log(data);
             })
 
             socket.on('error', function (err) {
                 console.log(err);
-              });
+			});
 
 		</script>
-	</head>
-<body>
- <button onclick='socket.emit("say",{"room":room,"message":"hello world"})'>
- Say hello world
- </button>
-</body>
 </html>
