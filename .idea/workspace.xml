@@ -1,8 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="67021403-04f9-4589-b1fb-0439fa29a77e" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/public/javascripts/chat.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/stylesheets/chat.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/views/backup.ejs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+<<<<<<< HEAD
+=======
+      <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/stylesheets/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/stylesheets/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/users.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/users.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/chat.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/chat.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/index.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/index.ejs" afterDir="false" />
+>>>>>>> d718b49d62b884d26faf3737eb3c06971a49c903
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -11,6 +40,14 @@
   </component>
   <component name="ComposerSettings">
     <execution />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="CSS File" />
+        <option value="JavaScript File" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -25,10 +62,11 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="ts.external.directory.path" value="D:\PhpStorm 2020.2\plugins\JavaScriptLanguage\jsLanguageServicesImpl\external" />
   </component>
-  <component name="SpellCheckerSettings" BundledDictionaries="0" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" Dictionaries="0" CorrectionsLimit="5" DefaultDictionary="application-level" UseSingleDictionary="true" />
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -40,15 +78,37 @@
       <option name="presentableId" value="Default" />
       <updated>1599122620411</updated>
       <workItem from="1599122621422" duration="6157000" />
+<<<<<<< HEAD
       <workItem from="1599137034172" duration="11768000" />
       <workItem from="1599656830650" duration="329000" />
+=======
+      <workItem from="1599137034172" duration="10290000" />
+      <workItem from="1599202989644" duration="6300000" />
+      <workItem from="1599530436864" duration="153000" />
+      <workItem from="1599635566052" duration="10518000" />
+>>>>>>> d718b49d62b884d26faf3737eb3c06971a49c903
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="2" />
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="WindowStateProjectService">
+    <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1599530588634">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1599530588634" />
     <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1599124543287">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

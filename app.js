@@ -34,21 +34,45 @@ server.listen(port, () => {
 
 io.on('connection', function (socket) {
   console.log('connected');
+  console.log(Object.keys(io.sockets.sockets).length);
+  io.emit('totalOnline', Object.keys(io.sockets.sockets).length);
 
   socket.on('join_room', (room) => {
     socket.join(room)
   });
 
-  socket.on('say',function(data){
-    io.to(data.room).emit('message',data.message);
-  })
-
   socket.on('error', function (err) {
     console.log(err);
   });
-});
 
-console.log(io.sockets.rooms);
+  socket.on('login', (data) => {
+    socket.user_id = data.user_id
+    console.log(socket.user_id)
+    socket.emit('userOnline', socket.user_id);
+  });
+
+  socket.on('disconnect', () => {
+    socket.emit('userOffline', socket.user_id)
+  })
+
+  socket.on('typing', (data) => {
+    socket.to(data.room).emit('display', data)
+  });
+
+  socket.on('chatWithSomeone', (data) => {
+    if (data.sender) {
+      socket.join(data.sender)
+      socket.broadcast.emit('chat-with-someone', data)
+    }
+  })
+
+  // sending to the client
+  socket.emit('hello', 'can you hear me?', 1, 2, 'abc');
+
+  // sending to all clients except sender
+  socket.broadcast.emit('broadcast', 'hello friends!');
+
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

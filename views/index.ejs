@@ -1,31 +1,105 @@
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
 <html>
 	<head>
 		<title>Demo Socketio - Homepage</title>
-		<script src="socket.io/socket.io.js"></script>
-
-		<script>
-			var socket = io.connect("http://localhost:3001");
-            let room = 'room1';
-
-            socket.on('connect', async () => {
-                socket.emit('join_room', room);
-
-                socket.emit('message',  ({room: 'room1', message: 'xin chào'}));
-            });
-
-            socket.on('message1',  (data) => {
-                console.log(data);
-            })
-
-            socket.on('error', function (err) {
-                console.log(err);
-              });
-
-		</script>
 	</head>
+	<script src="socket.io/socket.io.js"></script>
+	<link rel="stylesheet" type="text/css" href="stylesheets/style.css">
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.js"></script>
+
 <body>
+<p> Type your name here: <input name="username" id="username"></p>
+Type your room: <input name="room" id="room">
+Type something: <input name="message" id="message">
+
  <button onclick='socket.emit("say",{"room":room,"message":"hello world"})'>
  Say hello world
  </button>
+
+<div>
+	<p class="typing">
+		Needs someone chat here
+	</p>
+</div>
+
+<div>
+	typing...
+	<div class="chat-bubble">
+		<div class="typing">
+		  <div class="dot"></div>
+		  <div class="dot"></div>
+		  <div class="dot"></div>
+		</div>
+	</div>
+
+	<div>
+		Chat with stranger!!
+		<table >
+			<th>Tên</th>
+			<th>Message </th>
+			<td>
+				<tr>Q</tr>
+				<tr> mass</tr>
+			</td>
+		</table>
+	</div>
+</div>
 </body>
+	<script>
+		$(document).ready(function() {
+			$('#action_menu_btn').click(function () {
+				$('.action_menu').toggle();
+			});
+
+			var timeout;
+			var socket = io.connect("http://localhost:3001");
+
+			room = () => {
+
+			}
+			socket.on('connect', async () => {
+				socket.emit('message', ({room: $('#room').val(), message: 'xin chào'}));
+			});
+
+			function timeoutFunction() {
+				socket.emit("typing", {'room': $('#room').val(), 'type': false});
+			}
+
+			$('#message').keyup(() => {
+				socket.emit('typing', {'room': $('#room').val(), 'user': $('#username').val(), 'type': true})
+				clearTimeout(timeout);
+				timeout = setTimeout(timeoutFunction, 2000);
+			});
+
+			$('#room').keyup(() => {
+				socket.emit('join_room', $('#room').val());
+			})
+
+			socket.on('display', (data) => {
+				console.log(data);
+				if (data.type) {
+					$('.typing').text(`${data.user} is typing...`)
+				} else {
+					$('.typing').text("");
+				}
+			})
+
+			socket.on('message', (data) => {
+				console.log(data);
+			})
+
+			socket.on('error', function (err) {
+				console.log(err);
+			});
+		});
+
+		</script>
 </html>
