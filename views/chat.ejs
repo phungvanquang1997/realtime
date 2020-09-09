@@ -22,8 +22,6 @@
 	<div>
 		<p> Type your name here: <input name="username" id="username"></p>
 		<p> Type your room: <input name="room" id="room"></p>
-		<p> Type something: <input name="message" id="message"></p>
-		<p> Type with somone: <input name="chat-with-someone" id="chat-with-someone"> </p>
 		<p> message: <input name="message1" id="message1"> </p>
 		<p> <button id="send">Send</button></p>
 		<div>
@@ -38,7 +36,22 @@
 
 			<div>
 				Chat with stranger!!
+				<select id="users">
+					<option value="1"> Thắng </option>
+					<option value="2"> Quang </option>
+					<option value="3"> Tuấn </option>
+					<option value="4"> Thanh </option>
+					<option value="5"> Quần </option>
+					<option value="6"> Chin </option>
+				</select>
 			</div>
+			<div>
+
+				current user_id <input type="text" id="user_id">
+			</div>
+	        <div id='show_messages'>
+
+	        </div>
 		</div>
 	</div>
 		<div class="container-fluid h-100">
@@ -53,19 +66,43 @@
 						</div>
 					</div>
 					<div class="card-body contacts_body">
-						<ui class="contacts">
-						<li class="active">
-							<div class="d-flex bd-highlight">
-								<div class="img_cont">
-									<img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="rounded-circle user_img">
-									<span class="online_icon"></span>
+						<ui id="user_list" class="contacts">
+							<li class="active" value="2">
+								<div class="d-flex bd-highlight">
+									<div class="img_cont">
+										<img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="rounded-circle user_img">
+										<span class="online_icon"></span>
+									</div>
+									<div class="user_info">
+										<span>Khalid</span>
+										<p>Kalid is online</p>
+									</div>
 								</div>
-								<div class="user_info">
-									<span>Khalid</span>
-									<p>Kalid is online</p>
+							</li>
+							<li value="3">
+								<div class="d-flex bd-highlight">
+									<div class="img_cont">
+										<img src="https://2.bp.blogspot.com/-8ytYF7cfPkQ/WkPe1-rtrcI/AAAAAAAAGqU/FGfTDVgkcIwmOTtjLka51vineFBExJuSACLcBGAs/s320/31.jpg" class="rounded-circle user_img">
+										<span class="online_icon offline"></span>
+									</div>
+									<div class="user_info">
+										<span> Quang</span>
+										<p>Quang left 7 mins ago</p>
+									</div>
 								</div>
-							</div>
-						</li>
+							</li>
+							<li value="4">
+								<div class="d-flex bd-highlight">
+									<div class="img_cont">
+										<img src="https://2.bp.blogspot.com/-8ytYF7cfPkQ/WkPe1-rtrcI/AAAAAAAAGqU/FGfTDVgkcIwmOTtjLka51vineFBExJuSACLcBGAs/s320/31.jpg" class="rounded-circle user_img">
+										<span class="online_icon offline"></span>
+									</div>
+									<div class="user_info">
+										<span>Thanh</span>
+										<p>Thanh left 7 mins ago</p>
+									</div>
+								</div>
+							</li>
 						</ui>
 					</div>
 					<div class="card-footer"></div>
@@ -97,7 +134,7 @@
 								</ul>
 							</div>
 						</div>
-						<div class="card-body msg_card_body">
+						<div class="card-body msg_card_body" id="chat_frame">
 							<div class="d-flex justify-content-start mb-4">
 								<div class="img_cont_msg">
 									<img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="rounded-circle user_img_msg">
@@ -167,8 +204,8 @@
 								<div class="input-group-append">
 									<span class="input-group-text attach_btn"><i class="fas fa-paperclip"></i></span>
 								</div>
-								<textarea name="" class="form-control type_msg" placeholder="Type your message..."></textarea>
-								<div class="input-group-append">
+								<textarea name="message" id="message" class="form-control type_msg" placeholder="Type your message..."></textarea>
+								<div class="input-group-append" id="send_message">
 									<span class="input-group-text send_btn"><i class="fas fa-location-arrow"></i></span>
 								</div>
 							</div>

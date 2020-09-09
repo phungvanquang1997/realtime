@@ -59,6 +59,21 @@ io.on('connection', function (socket) {
     socket.to(data.room).emit('display', data)
   });
 
+  socket.on('createChatRoom', (data) => {
+    if (data.room && data.to_user) {
+      socket.join(data.room)
+      //emit event cho user còn lại để tham gia room
+      socket.broadcast.emit('joinToChat', data)
+    }
+  })
+
+  socket.on('sendMessage', (data) => {
+    if (data) {
+      console.log(data);
+      socket.to(data.room).emit('receiveMessage', data)
+    }
+  })
+
   socket.on('chatWithSomeone', (data) => {
     if (data.sender) {
       socket.join(data.sender)
