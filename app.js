@@ -27,6 +27,15 @@ app.use('/users', usersRouter);
 
 var server = require("http").createServer(app);
 var io = require("socket.io")(server);
+const users = [];
+
+deleteUserOnline = (userId) => {
+   users.forEach(function (user, key) {
+      if (user.user_id == userId) {
+        users.splice(key, 1)
+      }
+   })
+}
 
 server.listen(port, () => {
   console.log(`server port: ${port}`);
@@ -34,7 +43,6 @@ server.listen(port, () => {
 
 io.on('connection', function (socket) {
   console.log('connected');
-  console.log(Object.keys(io.sockets.sockets).length);
   io.emit('totalOnline', Object.keys(io.sockets.sockets).length);
 
   socket.on('join_room', (room) => {
@@ -47,11 +55,13 @@ io.on('connection', function (socket) {
 
   socket.on('login', (data) => {
     socket.user_id = data.user_id
-    console.log(socket.user_id)
-    socket.emit('userOnline', socket.user_id);
+    users.push({'user_id': data.user_id, 'user_name': data.user_name})
+    console.log(users)
+    io.emit('userOnline', users)
   });
 
   socket.on('disconnect', () => {
+    console.log(socket.user_id)
     socket.emit('userOffline', socket.user_id)
   })
 
@@ -69,7 +79,6 @@ io.on('connection', function (socket) {
 
   socket.on('sendMessage', (data) => {
     if (data) {
-      console.log(data);
       socket.to(data.room).emit('receiveMessage', data)
     }
   })
@@ -79,6 +88,10 @@ io.on('connection', function (socket) {
       socket.join(data.sender)
       socket.broadcast.emit('chat-with-someone', data)
     }
+  })
+
+  socket.on('disconnect', () => {
+    deleteUserOnline(socket.user_id)
   })
 
   // sending to the client

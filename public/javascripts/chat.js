@@ -3,7 +3,7 @@ var currentUser = () => {
 }
 
 var toUser = () => {
-    return $( "#users option:selected" ).val();
+    return $("#to_user_id").val();
 }
 
 var createRoomName = (userId, toUserId) => {
@@ -14,27 +14,50 @@ var createRoomName = (userId, toUserId) => {
     }
 }
 
+var clearMessage = () => {
+    $('#message').val('');
+}
+
 $(document).ready(function() {
     $('#action_menu_btn').click(function () {
         $('.action_menu').toggle();
     });
 
     var timeout;
-    var socket = io.connect("http://localhost:3001");
+    var socket = io({transports: ['websocket'], upgrade: false});
 
     function timeoutFunction() {
         socket.emit("typing", {'room': $('#room').val(), 'type': false});
     }
 
-    socket.on('connect', async () => {
-        socket.emit('login', ({user_id: currentUser()}));
-    });
+    function makeUserId(length) {
+        var result           = '';
+        var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        var charactersLength = characters.length;
+        for ( var i = 0; i < length; i++ ) {
+            result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        return result;
+    }
 
-    //create chat connection
-    $('#user_selection').click(function () {
-        let userId = 1;
-        let toUserId = 2;
+    $('#user_list').on('click', '.delegate', function () {
+        let toUserId = ($(this)).attr('value');
+        let toUserName = $('#name_of_' + toUserId).val();
+        $('#to_user_name').html(toUserName)
+        $('#to_user_id').val(toUserId)
+        $('#user_list li').removeClass('active')
+        $(this).addClass('active')
+        $('#window').removeClass('hidden').addClass('visiable')
     })
+
+    socket.on('connect', async () => {
+        let userId = makeUserId(5)
+        let userName = makeUserId(10)
+        $('#user_id').val(userId)
+        $('#user_name').val(userName)
+
+        socket.emit('login', ({user_id: userId, user_name: userName}))
+    });
 
     socket.on('joinToChat', (data) => {
         let userId = currentUser();
@@ -44,7 +67,7 @@ $(document).ready(function() {
         }
     })
 
-    let buildHTMLMessageSender = (message, isSender) => {
+    var buildHTMLMessageSender = (message, isSender) => {
         if (!isSender) {
             var html = "<div class=\"d-flex justify-content-start mb-4\">\n" +
                 "\t<div class=\"img_cont_msg\">\n" +
@@ -57,16 +80,40 @@ $(document).ready(function() {
                 "</div>"
         } else {
             var html = "<div class=\"d-flex justify-content-end mb-4\">\n" +
-                "\t<div class=\"msg_cotainer_send\">\n" +
+                "\t<div class=\"msg_cotainer_send\">" +
                 message +
-                "\t\t<span class=\"msg_time_send\">8:55 AM, Today</span>\n" +
+                "<span class=\"msg_time_send\">9:10 AM, Today</span>\n" +
                 "\t</div>\n" +
                 "\t<div class=\"img_cont_msg\">\n" +
-                "<img src=\"https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg\" class=\"rounded-circle user_img_msg\">\n" +
+                "\t\t<img src=\"https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg\" class=\"rounded-circle user_img_msg\">\n" +
                 "\t</div>\n" +
                 "</div>"
         }
         return html;
+    }
+
+    var buildUserOnline = (userId, userName) => {
+        return "<li class=\"delegate\" value='" + userId + "'>\n" +
+            "<div class=\"d-flex bd-highlight\">\n" +
+            "<div class=\"img_cont\">\n" +
+            "<img src=\"https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg\" class=\"rounded-circle user_img\">\n" +
+            "<span class=\"online_icon\"></span>\n" +
+            "</div>\n" +
+            "<div class=\"user_info\">\n" +
+            "<span>" +
+            userName +
+            "</span>\n" +
+            "<p id='user_" + userId + "'>" + userName + " is online</p>" +
+            "<input class='hidden' id='name_of_" + userId + "' value='" + userName + "'>" +
+            "</div>\n" +
+            "</div>\n" +
+            "</li>"
+    }
+
+    var addUserOnline = (userId, userName) => {
+        if (userId !== currentUser()) {
+            $('#user_list').append(buildUserOnline(userId, userName))
+        }
     }
 
     //join 1 channel / room là một user_id
@@ -81,7 +128,17 @@ $(document).ready(function() {
 
         socket.emit('createChatRoom', {'sender': userId, 'room': room, 'to_user': toUserId});
         socket.emit('sendMessage', {'sender': userId, 'room': room, 'message' : message})
+        clearMessage();
     })
+
+    var input = $('#message')[0];
+    input.addEventListener("keyup", function(event) {
+        // Number 13 is the "Enter" key on the keyboard
+        if (event.keyCode === 13) {
+            $('#send_message').click();
+        }
+    });
+
 
     socket.on('receiveMessage', (data) => {
         console.log(data);
@@ -96,26 +153,20 @@ $(document).ready(function() {
     });
     ////
 
-    $('#chat-with-someone').keyup(() => {
-        socket.emit('chatWithSomeone', {'sender': $('#username').val(), 'to': $('#chat-with-someone').val() });
-    });
-
-    socket.on('chatWithSomeone', (data) => {
-        if (data.sender && data.to === $('#username').val()) {
-            socket.emit('join_room', data.sender);
-        }
-    });
 
     socket.on('totalOnline', (total) => {
         console.log('tổng số người đang online: ' + total)
     });
 
-    socket.on('userOnline', async (userId) => {
-
+    socket.on('userOnline',  (usersOnline) => {
+        console.log(usersOnline);
+        usersOnline.forEach(function (user) {
+            addUserOnline(user.user_id, user.user_name)
+        })
     });
 
-    socket.on('userOffline', async (userId) => {
-
+    socket.on('userOffline', async (userId, userName) => {
+        $('#user_' + userId).html(userName + ' is offline')
     });
 
     $('#message').keyup(() => {
@@ -130,10 +181,6 @@ $(document).ready(function() {
         clearTimeout(timeout);
         timeout = setTimeout(timeoutFunction, 2000);
     });
-
-    $('#room').keyup(() => {
-        socket.emit('join_room', $('#room').val());
-    })
 
     socket.on('display', (data) => {
         console.log(data);
