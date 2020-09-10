@@ -1,0 +1,30 @@
+<html>
+<head>
+    <script src="/socket.io/socket.io.js"></script>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/chat.css">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+<div  style="
+    display: inline-block;
+    position: fixed;
+    top: -50%;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 300px;
+    height: 200px;
+    margin: auto;">
+    <div>
+        <form action="/users" method="GET">
+            <p class="bold">Nhập tên của bạn để tham gia chat nào :'> </p>
+            <input value="" name="user_name" id="user_name">
+            <button style="margin-top: 5px" type="submit" class="btn btn-info">Chat với mọi người</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

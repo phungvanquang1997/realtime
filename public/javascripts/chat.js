@@ -43,18 +43,20 @@ $(document).ready(function() {
     $('#user_list').on('click', '.delegate', function () {
         let toUserId = ($(this)).attr('value');
         let toUserName = $('#name_of_' + toUserId).val();
+        $(this).find('.text-danger').remove();
         $('#to_user_name').html(toUserName)
         $('#to_user_id').val(toUserId)
         $('#user_list li').removeClass('active')
         $(this).addClass('active')
         $('#window').removeClass('hidden').addClass('visiable')
+
     })
 
     socket.on('connect', async () => {
         let userId = makeUserId(5)
-        let userName = makeUserId(10)
+        let userName = $('#user_name').val();
         $('#user_id').val(userId)
-        $('#user_name').val(userName)
+       // $('#user_name').val(userName)
 
         socket.emit('login', ({user_id: userId, user_name: userName}))
     });
@@ -147,7 +149,13 @@ $(document).ready(function() {
             html += data.message;
             html += '</p>';
 
-            $('#show_messages').append(html);
+            $('#user_list li').each(function()  {
+                let userId = $(this).attr('value');
+                if (userId == data.sender) {
+                    $(this).find('.user_info').append('<p class="text-danger bold font-12">Bạn có một thông báo mới</p>')
+                }
+            });
+
             $('#chat_frame').append(buildHTMLMessageSender(data.message, false))
         }
     });
@@ -156,6 +164,7 @@ $(document).ready(function() {
 
     socket.on('totalOnline', (total) => {
         console.log('tổng số người đang online: ' + total)
+        $('#total').html(total)
     });
 
     socket.on('userOnline',  (usersOnline) => {
@@ -165,8 +174,9 @@ $(document).ready(function() {
         })
     });
 
-    socket.on('userOffline', async (userId, userName) => {
-        $('#user_' + userId).html(userName + ' is offline')
+    socket.on('userOffline', async (user) => {
+        console.log(user);
+        $('#user_' + user.user_id).html("<p class='text-warning'>" + user.user_name + ' is offline' + "</p>")
     });
 
     $('#message').keyup(() => {

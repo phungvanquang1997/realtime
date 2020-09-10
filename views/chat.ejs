@@ -29,21 +29,12 @@
 					<div class="dot"></div>
 				</div>
 			</div>
-
-			<div>
-				Chat with stranger!!
-				<select id="users">
-					<option value="1"> Thắng </option>
-					<option value="2"> Quang </option>
-					<option value="3"> Tuấn </option>
-					<option value="4"> Thanh </option>
-					<option value="5"> Quần </option>
-					<option value="6"> Chin </option>
-				</select>
-			</div>
 			<div>
 				current user_id: <input type="text" id="user_id">
-				current user_name: <input type="text" id="user_name">
+				current user_name: <input type="text" id="user_name" value="<%- user_name %>">
+			</div>
+			<div class="bold">
+				Tổng số người đang hoạt động: <span id="total"></span>
 			</div>
 		</div>
 	</div>
@@ -74,7 +65,7 @@
 									<span class="online_icon"></span>
 								</div>
 								<div class="user_info">
-									<span>Chat with <span id="to_user_name"> Khalid </span></span>
+									<span id="to_user_name"> Khalid </span>
 									<input id="to_user_id" value="-1" hidden>
 								</div>
 								<div class="video_cam">

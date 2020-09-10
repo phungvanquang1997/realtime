@@ -55,14 +55,14 @@ io.on('connection', function (socket) {
 
   socket.on('login', (data) => {
     socket.user_id = data.user_id
+    socket.user_name = data.user_name
     users.push({'user_id': data.user_id, 'user_name': data.user_name})
-    console.log(users)
     io.emit('userOnline', users)
   });
 
   socket.on('disconnect', () => {
-    console.log(socket.user_id)
-    socket.emit('userOffline', socket.user_id)
+    console.log(socket.user_id + ' is disconnected')
+    socket.broadcast.emit('userOffline', {user_id: socket.user_id, user_name: socket.user_name})
   })
 
   socket.on('typing', (data) => {
