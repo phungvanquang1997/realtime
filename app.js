@@ -28,7 +28,7 @@ app.use('/users', usersRouter);
 var server = require("http").createServer(app);
 var io = require("socket.io")(server);
 const users = [];
-
+const chatLogs = [];
 deleteUserOnline = (userId) => {
    users.forEach(function (user, key) {
       if (user.user_id == userId) {
@@ -72,14 +72,19 @@ io.on('connection', function (socket) {
   socket.on('createChatRoom', (data) => {
     if (data.room && data.to_user) {
       socket.join(data.room)
-      //emit event cho user còn lại để tham gia room
-      socket.broadcast.emit('joinToChat', data)
+      //console.log(chatLogs);
+      chatLogs[data.room] = [];
+      console.log(data);
     }
   })
 
   socket.on('sendMessage', (data) => {
     if (data) {
       socket.to(data.room).emit('receiveMessage', data)
+
+      chatLogs[data.room].push({'sender': 1, 'time': Date.now(), 'message' : 'hello'});
+      chatLogs[data.room].push({'sender': 1, 'time': Date.now(), 'message' : 'hello2'});
+      console.log(chatLogs);
     }
   })
 
