@@ -3,7 +3,6 @@ var router = express.Router();
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  console.log(req.query.user_name);
   res.render('chat', {
     user_name: req.query.user_name
   });

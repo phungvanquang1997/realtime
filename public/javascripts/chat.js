@@ -6,6 +6,10 @@ var toUser = () => {
     return $("#to_user_id").val();
 }
 
+var fixedHeight = () => {
+    return 100000;
+}
+
 var createRoomName = (userId, toUserId) => {
     if (userId > toUserId) {
         return userId + '_' + toUserId;
@@ -14,8 +18,61 @@ var createRoomName = (userId, toUserId) => {
     }
 }
 
+var getRoom =  () => {
+    return createRoomName(currentUser(), toUser());
+}
+
 var clearMessage = () => {
     $('#message').val('');
+}
+
+var buildHTMLMessageSender = (message, isSender) => {
+    if (!isSender) {
+        var html = "<div class=\"d-flex justify-content-start mb-4\">\n" +
+            "\t<div class=\"img_cont_msg\">\n" +
+            "\t\t<img src=\"https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg\" class=\"rounded-circle user_img_msg\">\n" +
+            "\t</div>\n" +
+            "\t<div class=\"msg_cotainer\">\n" +
+            message +
+            "\t\t<span class=\"msg_time\">8:40 AM, Today</span>\n" +
+            "\t</div>\n" +
+            "</div>"
+    } else {
+        var html = "<div class=\"d-flex justify-content-end mb-4\">\n" +
+            "\t<div class=\"msg_cotainer_send\">" +
+            message +
+            "<span class=\"msg_time_send\">9:10 AM, Today</span>\n" +
+            "\t</div>\n" +
+            "\t<div class=\"img_cont_msg\">\n" +
+            "\t\t<img src=\"https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg\" class=\"rounded-circle user_img_msg\">\n" +
+            "\t</div>\n" +
+            "</div>"
+    }
+    return html;
+}
+
+var buildUserOnline = (userId, userName) => {
+    return "<li class=\"delegate\" value='" + userId + "'>\n" +
+        "<div class=\"d-flex bd-highlight\">\n" +
+        "<div class=\"img_cont\">\n" +
+        "<img src=\"https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg\" class=\"rounded-circle user_img\">\n" +
+        "<span class=\"online_icon\"></span>\n" +
+        "</div>\n" +
+        "<div class=\"user_info\">\n" +
+        "<span>" +
+        userName +
+        "</span>\n" +
+        "<p id='user_" + userId + "'>" + userName + " is online</p>" +
+        "<input class='hidden' id='name_of_" + userId + "' value='" + userName + "'>" +
+        "</div>\n" +
+        "</div>\n" +
+        "</li>"
+}
+
+var addUserOnline = (userId, userName) => {
+    if (userId !== currentUser()) {
+        $('#user_list').append(buildUserOnline(userId, userName))
+    }
 }
 
 $(document).ready(function() {
@@ -27,7 +84,7 @@ $(document).ready(function() {
     var socket = io({transports: ['websocket'], upgrade: false});
 
     function timeoutFunction() {
-        socket.emit("typing", {'room': $('#room').val(), 'type': false});
+        socket.emit("typing", {'room': getRoom(), 'type': false});
     }
 
     function makeUserId(length) {
@@ -39,18 +96,6 @@ $(document).ready(function() {
         }
         return result;
     }
-
-    $('#user_list').on('click', '.delegate', function () {
-        let toUserId = ($(this)).attr('value');
-        let toUserName = $('#name_of_' + toUserId).val();
-        $(this).find('.text-danger').remove();
-        $('#to_user_name').html(toUserName)
-        $('#to_user_id').val(toUserId)
-        $('#user_list li').removeClass('active')
-        $(this).addClass('active')
-        $('#window').removeClass('hidden').addClass('visiable')
-
-    })
 
     socket.on('connect', async () => {
         let userId = makeUserId(5)
@@ -69,57 +114,21 @@ $(document).ready(function() {
         }
     })
 
-    var buildHTMLMessageSender = (message, isSender) => {
-        if (!isSender) {
-            var html = "<div class=\"d-flex justify-content-start mb-4\">\n" +
-                "\t<div class=\"img_cont_msg\">\n" +
-                "\t\t<img src=\"https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg\" class=\"rounded-circle user_img_msg\">\n" +
-                "\t</div>\n" +
-                "\t<div class=\"msg_cotainer\">\n" +
-                message +
-                "\t\t<span class=\"msg_time\">8:40 AM, Today</span>\n" +
-                "\t</div>\n" +
-                "</div>"
-        } else {
-            var html = "<div class=\"d-flex justify-content-end mb-4\">\n" +
-                "\t<div class=\"msg_cotainer_send\">" +
-                message +
-                "<span class=\"msg_time_send\">9:10 AM, Today</span>\n" +
-                "\t</div>\n" +
-                "\t<div class=\"img_cont_msg\">\n" +
-                "\t\t<img src=\"https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg\" class=\"rounded-circle user_img_msg\">\n" +
-                "\t</div>\n" +
-                "</div>"
-        }
-        return html;
-    }
+    $('#user_list').on('click', '.delegate', function () {
+        let toUserId = ($(this)).attr('value');
+        let toUserName = $('#name_of_' + toUserId).val();
+        $(this).find('.text-danger').remove();
+        $('#to_user_name').html(toUserName)
+        $('#to_user_id').val(toUserId)
+        $('#user_list li').removeClass('active')
+        $(this).addClass('active')
+        $('#window').removeClass('hidden').addClass('visiable')
 
-    var buildUserOnline = (userId, userName) => {
-        return "<li class=\"delegate\" value='" + userId + "'>\n" +
-            "<div class=\"d-flex bd-highlight\">\n" +
-            "<div class=\"img_cont\">\n" +
-            "<img src=\"https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg\" class=\"rounded-circle user_img\">\n" +
-            "<span class=\"online_icon\"></span>\n" +
-            "</div>\n" +
-            "<div class=\"user_info\">\n" +
-            "<span>" +
-            userName +
-            "</span>\n" +
-            "<p id='user_" + userId + "'>" + userName + " is online</p>" +
-            "<input class='hidden' id='name_of_" + userId + "' value='" + userName + "'>" +
-            "</div>\n" +
-            "</div>\n" +
-            "</li>"
-    }
+    })
 
-    var addUserOnline = (userId, userName) => {
-        if (userId !== currentUser()) {
-            $('#user_list').append(buildUserOnline(userId, userName))
-        }
-    }
 
     //join 1 channel / room là một user_id
-    $('#send_message').click(function () {
+    $('#send_message').on('click', function () {
         let userId = currentUser();
         //chung room là listen dc
         let toUserId = toUser();
@@ -131,6 +140,7 @@ $(document).ready(function() {
         socket.emit('createChatRoom', {'sender': userId, 'room': room, 'to_user': toUserId});
         socket.emit('sendMessage', {'sender': userId, 'room': room, 'message' : message})
         clearMessage();
+        $('#chat_frame').scrollTop(fixedHeight());
     })
 
     var input = $('#message')[0];
@@ -141,22 +151,20 @@ $(document).ready(function() {
         }
     });
 
-
     socket.on('receiveMessage', (data) => {
         console.log(data);
         if (data.message) {
-            let html = '<p>';
-            html += data.message;
-            html += '</p>';
-
             $('#user_list li').each(function()  {
                 let userId = $(this).attr('value');
                 if (userId == data.sender) {
-                    $(this).find('.user_info').append('<p class="text-danger bold font-12">Bạn có một thông báo mới</p>')
+                    if ($(this).find('.text-danger').length === 0) {
+                        $(this).find('.user_info').append('<p class="text-danger bold font-12">Bạn có một thông báo mới</p>')
+                    }
                 }
             });
 
             $('#chat_frame').append(buildHTMLMessageSender(data.message, false))
+            //$('#chat_frame').scrollTop(fixedHeight());
         }
     });
     ////
@@ -180,17 +188,16 @@ $(document).ready(function() {
     });
 
     $('#message').keyup(() => {
-        socket.emit('typing', {'room': $('#room').val(), 'user': $('#username').val(), 'type': true})
+        let userId = currentUser();
+        //chung room là listen dc
+        let toUserId = toUser();
+        let room = createRoomName(userId, toUserId);
+        let userName = $('#user_name').val();
+        socket.emit('typing', {'room': room, 'user_name': userName, 'type': true})
         clearTimeout(timeout);
         timeout = setTimeout(timeoutFunction, 2000);
     });
 
-
-    $('#message1').keyup(() => {
-        socket.emit('typing', {'room': $('#username').val(), 'user': $('#username').val(), 'type': true})
-        clearTimeout(timeout);
-        timeout = setTimeout(timeoutFunction, 2000);
-    });
 
     socket.on('display', (data) => {
         console.log(data);

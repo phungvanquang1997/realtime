@@ -21,14 +21,6 @@
 	<body>
 	<div>
 		<div>
-			typing...
-			<div class="chat-bubble hidden">
-				<div class="typing">
-					<div class="dot"></div>
-					<div class="dot"></div>
-					<div class="dot"></div>
-				</div>
-			</div>
 			<div>
 				current user_id: <input type="text" id="user_id">
 				current user_name: <input type="text" id="user_name" value="<%- user_name %>">
@@ -36,6 +28,7 @@
 			<div class="bold">
 				Tổng số người đang hoạt động: <span id="total"></span>
 			</div>
+			
 		</div>
 	</div>
 		<div class="container-fluid h-100">
@@ -84,6 +77,18 @@
 							</div>
 						</div>
 						<div class="card-body msg_card_body" id="chat_frame">
+						</div>
+						<div class="">
+							<div class="typing hidden">
+								<div class="img_cont_msg" style="padding-left: 10px">
+									<img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="rounded-circle user_img_msg">
+								</div>
+								<div style="padding-left: 20px">
+									<div class="dot"></div>
+									<div class="dot"></div>
+									<div class="dot"></div>
+								</div>
+							</div>
 						</div>
 						<div class="card-footer">
 							<div class="input-group">
