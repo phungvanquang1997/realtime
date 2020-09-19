@@ -74,6 +74,8 @@ io.on('connection', function (socket) {
       socket.join(data.room)
       //console.log(chatLogs);
       chatLogs[data.room] = [];
+
+      socket.broadcast.emit('joinToChat', data)
       console.log(data);
     }
   })
@@ -81,9 +83,7 @@ io.on('connection', function (socket) {
   socket.on('sendMessage', (data) => {
     if (data) {
       socket.to(data.room).emit('receiveMessage', data)
-
-      chatLogs[data.room].push({'sender': 1, 'time': Date.now(), 'message' : 'hello'});
-      chatLogs[data.room].push({'sender': 1, 'time': Date.now(), 'message' : 'hello2'});
+      //chatLogs[data.room].push({'sender': 1, 'time': Date.now(), 'message' : 'hello'});
       console.log(chatLogs);
     }
   })

@@ -108,6 +108,14 @@ $(document).ready(function() {
         socket.emit('login', ({user_id: userId, user_name: userName}))
     });
 
+    socket.on('joinToChat', (data) => {
+        let userId = currentUser();
+        //chung room là listen dc
+        if (data.sender && data.to_user === userId) {
+            socket.emit('join_room', data.room)
+        }
+    })
+
     $('#user_list').on('click', '.delegate', function () {
         let toUserId = ($(this)).attr('value');
         let toUserName = $('#name_of_' + toUserId).val();
@@ -128,12 +136,12 @@ $(document).ready(function() {
         let toUserId = toUser();
         let room = createRoomName(userId, toUserId);
         let message = $('#message').val();
-
+        console.log(room);
         $('#chat_frame').append(buildHTMLMessageSender(message, true))
-        if (!userOnRooms.includes(room) || userOnRooms.length === 0) {
+        //if (!userOnRooms.includes(room) || userOnRooms.length === 0) {
             socket.emit('createChatRoom', {'sender': userId, 'room': room, 'to_user': toUserId});
             userOnRooms.push(room);
-        }
+        //}
         socket.emit('sendMessage', {'sender': userId, 'room': room, 'message' : message})
         clearMessage();
         $('#chat_frame').scrollTop(fixedHeight());
